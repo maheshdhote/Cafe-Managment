@@ -1,0 +1,38 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+}
+#slidebar
+{
+    position: fixed;
+    width: 200px;
+    height: 100%;
+    background: #151719;
+    left: -200px;
+   transition: all 500ms  ease-in-out; 
+}
+#slidebar.active{
+    left: 0px;
+}
+
+#slidebar ul li {
+    color: antiquewhite;
+    list-style: none;
+    padding: 15px 15px;
+    border-bottom: 1px solid rgba(100,100,100,0.2);
+}
+#slidebar .toggle-btn
+{
+    position: absolute;
+    left: 230px;
+    top:20px;
+} 
+#slidebar .toggle-btn span
+{
+   display: block;
+   width: 30px;
+   height: 5px;
+   background: #151719;
+   margin: 5px -5px;
+} 

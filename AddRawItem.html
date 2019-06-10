@@ -1,0 +1,228 @@
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='AddRawItem.css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+<body>
+
+        <h2 class="heading">Manage Raw Items </h2>
+
+        <div ng-app="myApp" ng-controller="showData"> 
+        <!-- Insert Data -->
+
+        <button class="collapsible" id="id_add_item">Add Item To Database</button>
+        <div class="content">
+          
+          <form>
+            <table>
+           <tr>
+             <td> Enter Item Name :</td> <td><input   type="text"  name="ItemName" ng-model="ItemName"  ></td></tr>
+             <tr><td>Select Weight type</td>
+              <td><select  name="ItemWeight" ng-model="ItemWeight"required>
+                <option></option>
+                <option value="KiloGram">KiloGram</option>
+                <option value="Gram">Gram</option>
+                <option value="Liter">Liter</option>
+                <option value="unit">Unit</option>
+
+              </select></td></tr>
+              <tr><td>Enter Tax</td><td><input  type="text" ng-model="Tax" placeholder="Enter Tax" required ></td></tr>
+             
+              <tr><td>Enter Rate</td><td><input type="text" ng-model="Rate" placeholder="Enter Rate" required></td></tr>
+              
+              <tr><td>Enter Price</td><td><input type="text" ng-model="Price" placeholder="Enter Price" required></td></tr>
+              
+              <tr><td>Enter Vendor Name</td><td><input type="text" ng-model="Vendor" placeholder="Enter Vendor" required></td></tr>
+              
+              <tr><td>Weighted Average Purchase Rate </td><td><input type="text" ng-model="WA_PR" placeholder="Enter WA_Pucharse Rate" required></td></tr>
+             
+              <tr><td>Weighted Average Consumption Rate </td><td><input type="text" ng-model="WA_CR" placeholder="Enter WA_Consume Rate" required></td></tr>
+              <tr><td>Select Department Of Usage:</td></tr>
+              <tr><td><br></td></tr>
+<tr>
+<td><input type="checkbox" ng-model="checkboxModel.value1"   ng-true-value="'Bakery'" ng-false-value="'Null'" > Bakery</td>
+<td><input type="checkbox" ng-model="checkboxModel.value2"   ng-true-value="'Brownie'" ng-false-value="'Null'" > Brownie</td>
+</tr>
+<tr><td><br></td></tr>
+<tr><td><input type="checkbox" ng-model="checkboxModel.value3"   ng-true-value="'Pastry'" ng-false-value="'Null'" > Pastry</td>
+<td><input type="checkbox" ng-model="checkboxModel.value4"   ng-true-value="'Hot_Kitchen'" ng-false-value="'Null'" > Hot Kitchen</td>
+ </tr>
+<tr><td><br></td></tr>
+<tr><td><input type="checkbox" ng-model="checkboxModel.value5"   ng-true-value="'Staff_Kitchen'" ng-false-value="'Null'" > Staff Kitchen</td>
+<td><input type="checkbox" ng-model="checkboxModel.value6"   ng-true-value="'House_Keeping'" ng-false-value="'Null'" >House Keeping and Packaging</td>
+</tr>
+<tr><td><br></td></tr>
+<tr><td><input type="checkbox" ng-model="checkboxModel.value7"   ng-true-value="'Service'" ng-false-value="'Null'">Service</td></tr>
+
+<tr><td>  </td><td><input type="submit" ng-click="insertData()" value="{{submitMsg}}" style="font-size:20px;"></td></tr> 
+          
+</table>
+<h1 style="font-size:20px;" >{{msg}}<h1></h1>
+</form>
+          
+          
+              
+           
+      </div>
+          <!-- show Button -->
+        <button class="collapsible" id="id_show">Show All Items From Database</button>
+        <div class="content">
+          
+          <input type="submit" ng-click="refresh()" value="Refresh" style="font-size:20px;">
+          <h2 style="font-size: 20px">{{msg1}}{{old_item}}</h2>
+          <div style="overflow-x:auto;"> 
+          <table border="2">
+            <tr><th>Item_ID</th>
+            <th>Item_Name</th>
+            <th>Item_Weight</th>
+            <th>Tax</th>
+            <th>Primary_Rate</th>
+            <th>Price</th>
+            <th>Primary_Vendor</th>
+            <th>WA_Purchase_Rate</th>
+            <th>WA_Consume_Rate</th>
+            <th>Dept_of_usage</th></tr>
+
+              <tr ng-repeat="x in names">
+                <td>{{ x.Item_ID }}</td>
+                <td>{{ x.Item_Name }}</td>
+                <td>{{ x.Item_Weight }}</td>
+                
+                <td>{{ x.tax }}</td>
+                 <td>{{ x.Primary_Rate }}</td>
+                 <td>{{ x.Price }}</td>
+                 
+                 <td>{{ x.Primary_Vendor }}</td>
+                 <td>{{ x.WA_Purchase_Rate }}</td>
+                 <td>{{ x.WA_Consume_Rate }}</td>
+                 <td>{{ x.Dept_of_usage }}</td>
+
+                 <td><button class="button" ng-click=edit(x.Item_Name,x.Item_Weight,x.tax,x.Primary_Rate,x.Price,x.Primary_Vendor,x.WA_Purchase_Rate,x.WA_Consume_Rate,x.Dept_of_usage)>Edit</button></td> <!--x.Item_Name,x.Item_Weight,x.tax,x.Primary_Rate,x.Price,x.Primary_Vendor,x.WA_Purchase_Rate,x.WA_Consume_Rate,x.Dept_of_usage-->
+                 <td><button class="button" ng-click=delete(x.Item_Name)>Delete</button></td>
+              </tr>
+            </table>
+           
+          </div> 
+            </div>
+            <script>
+                var app = angular.module('myApp',[]);
+                app.controller('showData', function($scope, $http) {
+                  $scope.old_item="null";
+                  $scope.msg1=".";
+                  $scope.submitMsg ="Insert"
+                  $scope.checkboxModel = {
+                        value1 : 'null',
+                        value2 : 'null',
+                        value3 : 'null',
+                        value4 : 'null',
+                        value5 : 'null',
+                        value6 : 'null',
+                        value7 : 'null'
+                       
+                          };
+                   
+                  $scope.refresh =function(){
+                    $http.get("http://localhost/WildSugar/wsdlShow.php?method=load_items")
+                    .then(function (response) {
+                      $scope.names = response.data.records;
+                      $scope.msg1="Refreshed";
+
+                    });
+                  }
+
+                    $scope.insertData =function(){
+                      $scope.dept= $scope.checkboxModel.value1+','+$scope.checkboxModel.value2+','
+                      +$scope.checkboxModel.value3+','+$scope.checkboxModel.value4+','
+                      +$scope.checkboxModel.value5+','+$scope.checkboxModel.value6+','+$scope.checkboxModel.value7;
+
+
+
+                      if($scope.ItemName!=null && $scope.ItemWeight!=null && $scope.Tax!=null && $scope.Rate!=null && $scope.Price!=null && $scope.Vendor!=null && $scope.WA_PR!=null && $scope.WA_CR!=null)
+                      {
+                        $http.post("wsdlInsert.php",{
+                        'ItemName':$scope.ItemName,
+                        'ItemWeight':$scope.ItemWeight,
+                        'Tax':$scope.Tax,
+                        'Rate':$scope.Rate,
+                        'Price':$scope.Price,
+                        'Vendor':$scope.Vendor,
+                        'WA_PR':$scope.WA_PR,
+                        'WA_CR':$scope.WA_CR,
+                        'Dept':$scope.checkboxModel,
+                        'button_value':$scope.submitMsg,
+                        'Old_Item':$scope.old_item,
+
+                      })
+                   .then(function(response)
+                    { 
+                        $scope.msg= response.data;
+
+                     });
+                    
+                    }else
+                    {
+                    $scope.msg ="Add Values in Above Fields"
+                    }
+                    $scope.submitMsg ="Insert";
+                   }
+
+                      $scope.delete=function(Item_Name)
+                      {
+                        $http.post("delete.php",{'Item_Name':Item_Name,})
+                        .then(function(response){
+                         
+                          $scope.refresh();
+                        $scope.msg1 =response.data;
+                          
+                    
+                        })
+                       
+                      }
+
+                      $scope.edit = function(Item_Name,Item_Weight,tax,Primary_Rate,Price,Primary_Vendor,WA_Purchase_Rate,WA_Consume_Rate)
+                      {
+
+                        $scope.submitMsg ="Update";
+                        $scope.ItemName = Item_Name;
+                        $scope.ItemWeight =Item_Weight;
+                         $scope.Tax =tax;
+                         $scope.Rate =Primary_Rate;
+                         $scope.Price =Price;
+                        $scope.Vendor =Primary_Vendor;
+                         $scope.WA_PR =WA_Purchase_Rate;
+                         $scope.WA_CR =WA_Consume_Rate;
+                         $scope.old_item=Item_Name;
+                       
+
+                      }
+                  
+                });
+
+   
+
+            </script>
+
+        
+
+        <button class="collapsible" id="id_search">Search Item</button>
+        <div class="content">
+          mahesh
+        </div>
+
+        <button class="collapsible" id="id_update">Update Item</button>
+        <div class="content">
+        </div>
+
+        <button class="collapsible" id="id_delete">Delete Item</button>
+        <div class="content">
+        </div>
+      </div>
+        <script src='AddRawItem.js'></script>   
+
+
+ </body>
+</html>
